@@ -1,0 +1,22 @@
+#!/bin/bash
+file="/lib/i3blocks/tempSpotify.txt"
+ar=$(cat $file)
+
+if [ "$(pidof spotify)" ]
+then
+    echo "X"
+    ar2=$(xprop -name "Spotify Premium - Linux Preview" _NET_WM_ICON_NAME|\cut -d "\"" -f 2|cut -b 11-)
+    if [ "$ar" != "$ar2" ]
+    then
+	ar3=$(xprop -name "Spotify Premium - Linux Preview" _NET_WM_ICON_NAME|\cut -d "\"" -f 2|cut -b 11-)
+	sudo truncate -s 0 $file
+	echo $ar3 | sudo tee --append $file
+	twmnc -c ar3
+    fi
+    if [[ "${BLOCK_BUTTON}" -eq 1 ]]; then
+	killall spotify
+    fi
+	    
+else
+    echo ""
+fi

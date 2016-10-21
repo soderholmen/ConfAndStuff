@@ -1,0 +1,36 @@
+#!/bin/perl
+use strict;
+use warnings;
+my $content;
+my $string = "";
+my $back = 0;
+
+open( my $file1, '<','/home/gurra/.config/i3/i3blocks.txt');
+$content=<$file1>;
+for(my $i=0; $i <= $content; $i++){
+       $string.=" ";
+}
+print("❤" , $string);
+$back=<$file1>;
+if($content == 100){
+       $back = 1;
+   }
+elsif($content == 0){
+       $back = 0;
+  }
+close $file1;
+
+
+open( my $file2, '>',"/home/gurra/.config/i3/i3blocks.txt") or warn "Couldn't open: $!";
+if( $back == 1){
+      print $file2 $content-=1;
+      print $file2 "\n";
+      print $file2 $back;
+  }
+else{
+    print $file2 $content+=1;
+    print $file2 "\n";
+    print $file2 $back;
+}
+    close $file2;
+

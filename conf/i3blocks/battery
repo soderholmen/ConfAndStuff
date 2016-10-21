@@ -1,0 +1,79 @@
+#!/bin/bash
+
+BATTERY=0
+BATTERY_INFO=$(acpi -b | grep "Battery ${BATTERY}")
+BATTERY_STATE=$(echo "${BATTERY_INFO}" | grep -wo "Full\|Charging\|Discharging")
+BATTERY_POWER=$(echo "${BATTERY_INFO}" | grep -o '[0-9]\+%' |tr -d '%')
+
+URGENT_VALUE=10
+
+if [[ "${BATTERY_STATE}" = "Charging" ]]; then
+    if [[ ${BATTERY_POWER} < 20 ]]; then
+         echo " "
+         echo ""
+    elif [[ ${BATTERY_POWER} < 40 ]]; then
+         echo " "
+         echo ""
+    elif [[ ${BATTERY_POWER} < 60 ]]; then
+         echo " "
+         echo ""
+    elif [[ ${BATTERY_POWER} < 80 ]]; then
+         echo " "
+         echo ""
+    elif [[ ${BATTERY_POWER} > 80 ]]; then
+         echo " "
+         
+    fi
+elif [[ "${BATTERY_STATE}" = "Discharging" ]]; then
+    if [[ ( 10 < ${BATTERY_POWER} ) && ( ${BATTERY_POWER}  < 11 ) ]]; then
+         echo " "
+         echo ""
+    elif [[ ${BATTERY_POWER} < 20 ]]; then
+         echo " "
+         echo ""
+	 echo \#ff0000
+    elif [[ ${BATTERY_POWER} < 30 ]]; then
+         echo " "
+         echo ""
+	 echo \#ff0000
+    elif [[ ${BATTERY_POWER} < 40 ]]; then
+         echo " "
+         echo ""
+    elif [[ ${BATTERY_POWER} < 60 ]]; then
+         echo " "
+         echo ""
+    elif [[ ${BATTERY_POWER} < 80 ]]; then
+         echo " "
+         echo ""
+    elif [[ ${BATTERY_POWER} > 80 ]]; then
+         echo " "
+         echo ""
+    fi
+
+else
+    if [[ ${BATTERY_POWER} < 20 ]]; then
+         echo " "
+         echo ""
+    elif [[ ${BATTERY_POWER} < 40 ]]; then
+         echo " "
+         echo ""
+    elif [[ ${BATTERY_POWER} < 60 ]]; then
+         echo " "
+         echo ""
+    elif [[ ${BATTERY_POWER} < 80 ]]; then
+         echo " "
+         echo ""
+    elif [[ ${BATTERY_POWER} > 80 ]]; then
+         echo " "
+         echo ""
+    fi
+fi
+if [[ "${BLOCK_BUTTON}" -eq 1 ]]; then
+    notify="${BATTERY_INFO}"
+    twmnc --content "$notify" -s 25 --pos bottom_center --fs 25 -d 2000 --bg '#2f343f' --fg  '#f3f4f5'
+fi
+    
+if [[ "${BATTERY_POWER}" -le "${URGENT_VALUE}" ]]; then
+    twmnc -c "Battery low!" -s 25 --pos bottom_center --fs 25 -d 700 --bg '#2f343f' --fg  '#f3f4f5'
+    exit 33
+fi
